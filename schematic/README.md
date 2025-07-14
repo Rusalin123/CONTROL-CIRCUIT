@@ -1,10 +1,13 @@
 # Schematic description
 
-The description of this scheme begins with the power supply circuit. The power supply circuit receives a voltage of 9V from a battery and is stabilized at 5V. This voltage is agreed upon by the components and cannot affect the integrated circuits on the board. To 
+The description of this scheme begins with the power supply circuit. The power supply circuit receives a voltage of 9V from a battery and is stabilized at 5V. This voltage is agreed upon by the components and cannot affect the integrated circuits on the board.
+
+<br>To 
 build this circuit, a 7805 type voltage stabilizer is used. Considering the planned consumption of the circuit, a 7805 in a TO220 package is used, which can withstand a current of up to 1A. To avoid incorrect connection of the power supply, a 1N4001 diode (or another diode from the 1N4002, 1N4003, ..., 1N4007 series) is 
 installed at the input of the stabilizer. Capacitors C1 (100nF) and C2 (100µF) filter the input voltage, and C3 (100nF) and C4 (100µF) clean the output voltage. Electrolytic capacitors eliminate low-frequency components, while ceramic ones eliminate 
 high-frequency components. A green LED indicates the presence of 5V output voltage, and the current through LED is limited by resistor R1 of the order of hundreds of ohms.
-The clock signal is used to simulate the actual clocks for cars entering and leaving the parking lot. As you can see, these are taken to a pin strip. This happens because from the pin strip these signals must 
+
+<br>The clock signal is used to simulate the actual clocks for cars entering and leaving the parking lot. As you can see, these are taken to a pin strip. This happens because from the pin strip these signals must 
 reach the external Arduino board. Arduino, by programming it, will give a signal through that strip that will reach the counter and it will decrease or add to the 
 respective number. This clock signal is connected to the down and up pins of the counter, which have an important role in counting the free parking spaces. 
 Power on reset with Schmitt Trigger is used to ensure a correct and stable reset to the counters at startup, to avoid improper operation or initial errors. When the system is turned on, the input voltage 
