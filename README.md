@@ -1,4 +1,4 @@
-#CONTROL CIRCUIT FOR DISPLAYING  FREE SPACES IN A PARKING LOT
+# CONTROL CIRCUIT FOR DISPLAYING  FREE SPACES IN A PARKING LOT
 
 The control circuit is designed to help parking lots and especially drivers. 
 Figure represents the block diagram of this system. We can see on the left side is the car entrance. The driver does not have to press anything, because this entrance is automatic. Its automation is done through a Hall sensor that senses the presence of the car, provides an impulse to the Arduino software, and this raises the entry barrier and gives an impulse to the counter on the PCB. 
