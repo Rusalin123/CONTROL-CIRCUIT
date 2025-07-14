@@ -1,0 +1,136 @@
+#include <Servo.h>
+Servo intrare_servo;
+Servo iesire_servo;
+// inițializare pini intrare, ieșire si reset mașină
+int pin_reset = 4;
+int pin_iesire_masina = 8;
+int pin_intrare_masina = 7;
+//inițializare pini senzor Hall intrare mașină
+const int intrare_Hall = 3;
+int buttonState;
+int lastButtonState = LOW;
+//initializare pini senzor Hall iesire masina
+const int iesire_Hall = 5;
+int buttonState1;
+int lastButtonState1 = LOW;
+// initializare pentru debounce
+unsigned long lastDebounceTime = 0; // pentru intrare masina
+unsigned long lastDebounceTime1 = 0; // pentru iesire masina
+unsigned long debounceDelay = 50;
+int k = 99;
+void resetare() {
+digitalWrite(pin_reset, LOW);
+delay(500);
+digitalWrite(pin_reset, HIGH);
+}
+void intrare_masina() {
+digitalWrite(pin_intrare_masina, LOW);
+delay(100);
+digitalWrite(pin_intrare_masina, HIGH);
+}
+void iesire_masina() {
+digitalWrite(pin_iesire_masina, LOW);
+delay(100);
+digitalWrite(pin_iesire_masina, HIGH);
+}
+Electronică aplicată
+2023-2024
+Vela Cristian-Rusalin
+Circuit de comanda pentru afișarea locurilor libere disponibile într-o parcare
+- 48 -
+//initializare servo intrare
+void sweepupintrare() {
+for (int pos = 90; pos <= 180; pos += 1) {
+intrare_servo.write(pos); 
+delay(15); 
+}
+}
+void sweepdownintrare() {
+for (int pos = 180; pos >= 90; pos -= 1) {
+intrare_servo.write(pos); 
+delay(15); 
+}
+}
+// initializare intrare masina servo Hall
+void intrare_masina_Hall() {
+int reading = digitalRead(intrare_Hall);
+if (reading != lastButtonState) {
+lastDebounceTime = millis();
+}
+if ((millis() - lastDebounceTime) > debounceDelay) {
+if (reading != buttonState) {
+buttonState = reading;
+if (buttonState == LOW && k != 0) {
+k = k - 1;
+intrare_masina();
+sweepupintrare();
+delay(2000);
+sweepdownintrare();
+}
+}
+}
+lastButtonState = reading;
+}
+// initializare servo iesire
+void sweepupiesire() {
+for (int pos1 = 90; pos1 <= 180; pos1 += 1) {
+iesire_servo.write(pos1); 
+delay(15); 
+}
+}
+Electronică aplicată
+2023-2024
+Vela Cristian-Rusalin
+Circuit de comanda pentru afișarea locurilor libere disponibile într-o parcare
+- 49 -
+void sweepdowniesire() {
+for (int pos1 = 180; pos1 >= 90; pos1 -= 1) {
+iesire_servo.write(pos1); 
+delay(15); 
+}
+}
+//initializare hall iesire
+void iesire_masina_Hall() {
+int reading1 = digitalRead(iesire_Hall);
+if (reading1 != lastButtonState1) {
+lastDebounceTime1 = millis();
+}
+if ((millis() - lastDebounceTime1) > debounceDelay) {
+if (reading1 != buttonState1) {
+buttonState1 = reading1;
+if (buttonState1 == LOW && k != 99) {
+k = k + 1;
+iesire_masina();
+sweepupiesire();
+delay(2000);
+sweepdowniesire();
+}
+}
+}
+lastButtonState1 = reading1;
+}
+void setup() {
+Serial.begin(9600);
+// initializare pini
+pinMode(pin_reset, OUTPUT);
+pinMode(pin_iesire_masina, OUTPUT);
+pinMode(pin_intrare_masina, OUTPUT);
+digitalWrite(pin_reset, HIGH);
+digitalWrite(pin_iesire_masina, HIGH);
+digitalWrite(pin_intrare_masina, HIGH);
+delay(500);
+resetare();
+delay(500);
+pinMode(intrare_Hall, INPUT);
+pinMode(iesire_Hall, INPUT);
+
+//initializare pini servo
+intrare_servo.attach(9);
+intrare_servo.write(0);
+iesire_servo.attach(11);
+iesire_servo.write(0);
+}
+void loop() {
+intrare_masina_Hall();
+iesire_masina_Hall();
+}
